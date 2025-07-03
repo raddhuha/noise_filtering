@@ -1,7 +1,7 @@
 streamlit
-torch
-torchaudio
-librosa
+torch==2.2.2       # versi stabil 
+torchaudio==2.2.2   # cocok dengan torch
+librosa==0.10.1
 numpy
 matplotlib
 soundfile
