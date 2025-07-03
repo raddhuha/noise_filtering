@@ -2,6 +2,7 @@ streamlit
 whisper
 torch
 torchaudio
+demucs
 librosa
 soundfile
 numpy
