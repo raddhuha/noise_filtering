@@ -1,0 +1,9 @@
+streamlit
+torch==2.2.0+cpu
+torchaudio==2.2.0+cpu
+git+https://github.com/openai/whisper.git
+librosa
+soundfile
+numpy
+matplotlib
+audio-recorder-streamlit
