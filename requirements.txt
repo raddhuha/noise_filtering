@@ -1,11 +1,11 @@
 streamlit
-whisper
 torch
 torchaudio
-demucs
 librosa
-soundfile
 numpy
 matplotlib
-audio-recorder-streamlit
+soundfile
+openai-whisper
 ffmpeg-python
+audio-recorder-streamlit
+demucs==4.0.0
