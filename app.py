@@ -166,40 +166,6 @@ def process_with_pretrained_demucs(audio_path, model):
         st.error(f"Error processing with pretrained HT-Demucs: {e}")
         return None, None
 
-def calculate_audio_metrics(original, processed, sr):
-    """Hitung metrics untuk perbandingan audio"""
-    try:
-        # Ensure same length
-        min_len = min(len(original), len(processed))
-        original = original[:min_len]
-        processed = processed[:min_len]
-        
-        # RMS Energy
-        rms_original = np.sqrt(np.mean(original**2))
-        rms_processed = np.sqrt(np.mean(processed**2))
-        
-        # SNR estimation (simple)
-        noise_estimate = original - processed
-        signal_power = np.mean(processed**2)
-        noise_power = np.mean(noise_estimate**2)
-        snr = 10 * np.log10(signal_power / (noise_power + 1e-10))
-        
-        # Peak amplitude
-        peak_original = np.max(np.abs(original))
-        peak_processed = np.max(np.abs(processed))
-        
-        return {
-            'rms_original': rms_original,
-            'rms_processed': rms_processed,
-            'snr_improvement': snr,
-            'peak_original': peak_original,
-            'peak_processed': peak_processed,
-            'noise_reduction': 1 - (noise_power / (signal_power + 1e-10))
-        }
-    except Exception as e:
-        st.error(f"Error calculating metrics: {e}")
-        return None
-
 def transcribe_audio(audio_path, model, language="auto"):
     """Transkripsi audio dengan Whisper"""
     try:
@@ -398,37 +364,6 @@ def main():
                         st.pyplot(fig_spec)
                     except Exception as e:
                         st.error(f"Error Pembuatan spectrogram: {e}")
-                
-                # Audio metrics
-                if show_metrics:
-                    st.subheader("📊 Kualitas Audio Metrics")
-                    metrics = calculate_audio_metrics(original_audio, processed_audio, sr)
-                    
-                    if metrics:
-                        col1, col2, col3, col4 = st.columns(4)
-                        
-                        with col1:
-                            st.metric(
-                                "RMSE", 
-                                f"{metrics['rms_processed']:.4f}",
-                                f"{metrics['rms_processed'] - metrics['rms_original']:.4f}"
-                            )
-                        with col2:
-                            st.metric(
-                                "Peningakatan SNR", 
-                                f"{metrics['snr_improvement']:.2f} dB"
-                            )
-                        with col3:
-                            st.metric(
-                                "Peak Reduction", 
-                                f"{metrics['peak_processed']:.4f}",
-                                f"{metrics['peak_processed'] - metrics['peak_original']:.4f}"
-                            )
-                        with col4:
-                            st.metric(
-                                "Noise Reduction", 
-                                f"{metrics['noise_reduction']*100:.1f}%"
-                            )
                 
                 # Transcription section
                 st.subheader("📝 Speech Recognition")
